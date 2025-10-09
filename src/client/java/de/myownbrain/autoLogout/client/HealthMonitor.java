@@ -1,6 +1,7 @@
 package de.myownbrain.autoLogout.client;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -20,12 +21,10 @@ public class HealthMonitor {
                 String playerY = coordsFormat.format(client.player.getY() >= 0 ? Math.floor(client.player.getY()) : Math.ceil(client.player.getY()));
                 String playerZ = coordsFormat.format(client.player.getZ() >= 0 ? Math.floor(client.player.getZ()) : Math.ceil(client.player.getZ()));
 
-                MutableText text = Text.literal("You were disconnected due to low health by Auto Logout.\n\n").styled(style -> style.withBold(true).withColor(Formatting.GREEN))
-                        .append(Text.literal("Health: " + healthFormat.format(client.player.getHealth()) + " (≈" + Math.floor(client.player.getHealth()) / 2 + " Hearts)\n").styled(style -> style.withColor(Formatting.GOLD)))
-                        .append(Text.literal(String.format("Coordinates: %s %s %s", playerX, playerY, playerZ)).styled(style -> style.withColor(Formatting.GOLD)));
+                MutableText text = Text.literal("You were disconnected by Auto Logout due to low health.\n\n").styled(style -> style.withBold(true).withColor(Formatting.GREEN)).append(Text.literal("Health: " + healthFormat.format(client.player.getHealth()) + " (≈" + Math.floor(client.player.getHealth()) / 2 + " Hearts)\n").styled(style -> style.withColor(Formatting.GOLD))).append(Text.literal(String.format("Coordinates: %s %s %s", playerX, playerY, playerZ)).styled(style -> style.withColor(Formatting.GOLD)));
 
                 if (ConfigManager.isEntityTrackingEnabled) {
-                    List<String> entityNames = NearestEntityFinder.getNearestEntities().stream().map(entity -> entity.getName().getString()).toList();
+                    List<String> entityNames = NearestEntityFinder.getNearestEntities().stream().map(entity -> entity instanceof PlayerEntity ? entity.getName().getString() : entity.getType().getName().getString()).toList();
                     text.append(Text.literal("\nNearby Entities: " + String.join(", ", entityNames)).styled(style -> style.withColor(Formatting.GOLD)));
                 }
 

@@ -16,6 +16,7 @@ public class ConfigManager {
     public static boolean isModEnabled = true;
     public static float healthThreshold = 4.0f;
     public static String keyBinding = "key.keyboard.unknown";
+    public static InputUtil.Key currentKeyBinding = InputUtil.fromTranslationKey(keyBinding);
 
     public static boolean isEntityTrackingEnabled = true;
     public static int nearbyEntityCount = 5;
@@ -28,7 +29,7 @@ public class ConfigManager {
                 isModEnabled = config.isModEnabled;
                 healthThreshold = config.healthThreshold;
                 keyBinding = (config.keyBinding != null && !config.keyBinding.isEmpty()) ? config.keyBinding : "key.keyboard.unknown";
-                ModMenuIntegration.currentKeyBinding = InputUtil.fromTranslationKey(keyBinding);
+                currentKeyBinding = InputUtil.fromTranslationKey(keyBinding);
                 isEntityTrackingEnabled = config.isEntityTrackingEnabled;
                 nearbyEntityCount = config.nearbyEntityCount;
                 radius = config.radius;
@@ -44,7 +45,7 @@ public class ConfigManager {
         try {
             CONFIG_FILE.getParentFile().mkdirs();
             try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
-                ConfigData config = new ConfigData(isModEnabled, healthThreshold, keyBinding != null ? ModMenuIntegration.currentKeyBinding.getTranslationKey() : "key.keyboard.unknown", isEntityTrackingEnabled, nearbyEntityCount, radius);
+                ConfigData config = new ConfigData(isModEnabled, healthThreshold, currentKeyBinding != null ? currentKeyBinding.getTranslationKey() : "key.keyboard.unknown", isEntityTrackingEnabled, nearbyEntityCount, radius);
                 GSON.toJson(config, writer);
             }
         } catch (IOException e) {

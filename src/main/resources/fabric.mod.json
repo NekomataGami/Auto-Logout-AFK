@@ -4,7 +4,9 @@
   "version": "${version}",
   "name": "Auto Logout",
   "description": "Automatically disconnects when health reaches a threshold.",
-  "authors": ["MyOwnBrain"],
+  "authors": [
+    "MyOwnBrain"
+  ],
   "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/auto-logout/icon.png",
@@ -17,7 +19,7 @@
       "de.myownbrain.autoLogout.AutoLogout"
     ],
     "modmenu": [
-      "de.myownbrain.autoLogout.client.ModMenuIntegration"
+      "de.myownbrain.autoLogout.client.integration.ModMenuIntegrationImpl"
     ]
   },
   "mixins": [
@@ -30,13 +32,20 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": ">=${minecraft_version}",
-    "modmenu": ">=11.0.3",
-    "cloth-config": ">=15.0.140+fabric"
+    "minecraft": ">=${minecraft_version}"
+  },
+  "suggests": {
+    "modmenu": ">=${modmenu_version}",
+    "cloth-config": ">={clothconfig_version}+fabric"
   },
   "custom": {
     "modmenu": {
-      "modmenu_api": true
+      "links": {
+        "modmenu.modrinth": "https://modrinth.com/mod/auto-logout",
+        "modmenu.github_releases": "https://github.com/MyOwnBrain/Auto-Logout/releases",
+        "modmenu.website": "https://www.myownbrain.de/projects/auto-logout"
+      },
+      "update_checker": true
     }
   }
 }

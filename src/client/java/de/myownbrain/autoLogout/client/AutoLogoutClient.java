@@ -3,8 +3,6 @@ package de.myownbrain.autoLogout.client;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.minecraft.client.util.InputUtil;
-
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -23,22 +21,7 @@ public class AutoLogoutClient implements ClientModInitializer {
             if (ConfigManager.isEntityTrackingEnabled)
                 NearestEntityFinder.updateNearestEntities(client, ConfigManager.radius);
 
-            if (ModMenuIntegration.currentKeyBinding != InputUtil.UNKNOWN_KEY) {
-                if (client.currentScreen != null) {
-                    ModMenuIntegration.wasKeyPressed = false;
-                    return;
-                }
-
-                boolean isKeyPressed = ModMenuIntegration.isToggleKeyPressed();
-
-                if (isKeyPressed && !ModMenuIntegration.wasKeyPressed) {
-                    ConfigManager.isModEnabled = !ConfigManager.isModEnabled;
-                    ConfigManager.saveConfig();
-                    client.player.sendMessage(Text.literal("Auto Logout ").append(Text.literal(ConfigManager.isModEnabled ? "enabled" : "disabled").styled(style -> style.withBold(true))).styled(style -> style.withColor(ConfigManager.isModEnabled ? Formatting.GREEN : Formatting.RED)), false);
-                }
-
-                ModMenuIntegration.wasKeyPressed = isKeyPressed;
-            }
+            if (ModMenuIntegration.isAvailable()) ModMenuIntegration.handleToggleKey(client);
         });
 
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
