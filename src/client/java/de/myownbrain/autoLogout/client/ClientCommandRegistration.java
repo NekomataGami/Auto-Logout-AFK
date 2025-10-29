@@ -42,6 +42,12 @@ public class ClientCommandRegistration {
                             .then(ClientCommandManager.literal("help")
                                     .executes(ctx -> showHelp(ctx.getSource()))
                             )
+                            .then(ClientCommandManager.literal("join-message")
+                                    .then(ClientCommandManager.literal("enable")
+                                            .executes(ctx -> toggleJoinMessage(true)))
+                                    .then(ClientCommandManager.literal("disable")
+                                            .executes(ctx -> toggleJoinMessage(false)))
+                            )
             );
         });
     }
@@ -112,7 +118,7 @@ public class ClientCommandRegistration {
 
     private static int setTrackingRadius(double radius) {
         if (MinecraftClient.getInstance().player == null) return 0;
-        
+
         if (radius >= 1.0 && radius <= 64.0) {
             ConfigManager.radius = radius;
             ConfigManager.saveConfig();
@@ -126,6 +132,15 @@ public class ClientCommandRegistration {
         return Command.SINGLE_SUCCESS;
     }
 
+    private static int toggleJoinMessage(boolean enable) {
+        if (MinecraftClient.getInstance().player == null) return 0;
+
+        ConfigManager.showJoinMessage = enable;
+        ConfigManager.saveConfig();
+        MinecraftClient.getInstance().player.sendMessage(Text.literal("Join Message ").append(Text.literal(enable ? "enabled" : "disabled").styled(style -> style.withBold(true))).styled(style -> style.withColor(enable ? Formatting.GREEN : Formatting.RED)), false);
+        return Command.SINGLE_SUCCESS;
+    }
+
     private static int showHelp(FabricClientCommandSource source) {
         source.sendFeedback(Text.literal("")
                 .append(Text.literal("\nAuto Logout Commands\n").formatted(Formatting.GOLD, Formatting.BOLD, Formatting.UNDERLINE))
@@ -134,6 +149,8 @@ public class ClientCommandRegistration {
                 .append(Text.literal("/auto-logout disable").formatted(Formatting.RED)).append(Text.literal(" - Disables the mod\n").formatted(Formatting.WHITE))
                 .append(Text.literal("/auto-logout threshold").formatted(Formatting.DARK_PURPLE)).append(Text.literal(" - Displays the current threshold\n").formatted(Formatting.WHITE))
                 .append(Text.literal("/auto-logout threshold <value>").formatted(Formatting.AQUA)).append(Text.literal(" - Sets the threshold\n").formatted(Formatting.WHITE))
+                .append(Text.literal("/auto-logout join-message enable").formatted(Formatting.GREEN)).append(Text.literal(" - Enables the message when joining a world\n").formatted(Formatting.WHITE))
+                .append(Text.literal("/auto-logout join-message disable").formatted(Formatting.RED)).append(Text.literal(" - Disables the message when joining a world\n").formatted(Formatting.WHITE))
                 .append(Text.literal("\nEntity Tracking:\n").formatted(Formatting.GOLD))
                 .append(Text.literal("/auto-logout entity-tracking enable").formatted(Formatting.GREEN)).append(Text.literal(" - Enables Entity Tracking\n").formatted(Formatting.WHITE))
                 .append(Text.literal("/auto-logout entity-tracking disable").formatted(Formatting.RED)).append(Text.literal(" - Disables Entity Tracking\n").formatted(Formatting.WHITE))

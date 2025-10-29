@@ -26,6 +26,8 @@ Use **Commands** or the **Mod Menu Integration** to change the settings to fit y
 /auto-logout entity-tracking entity-count <value>
 /auto-logout entity-tracking radius
 /auto-logout entity-tracking radius <value>
+/auto-logout join-message enable
+/auto-logout join-message disable
 ```
 **Threshold** value has to be between **0** and **20**.<br/>
 **Entity Count** value has to be between **1** and **10**.<br/>
