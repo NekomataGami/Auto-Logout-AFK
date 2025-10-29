@@ -22,22 +22,52 @@ public class ConfigManager {
     public static int nearbyEntityCount = 5;
     public static double radius = 20;
 
+    public static boolean showJoinMessage = true;
+
     public static void loadConfig() {
+        boolean updated = false;
+
         if (CONFIG_FILE.exists()) {
             try (FileReader reader = new FileReader(CONFIG_FILE)) {
                 ConfigData config = GSON.fromJson(reader, ConfigData.class);
-                isModEnabled = config.isModEnabled;
-                healthThreshold = config.healthThreshold;
-                keyBinding = (config.keyBinding != null && !config.keyBinding.isEmpty()) ? config.keyBinding : "key.keyboard.unknown";
+
+                if (config.isModEnabled != null) isModEnabled = config.isModEnabled;
+                else updated = true;
+
+                if (config.healthThreshold != null) healthThreshold = config.healthThreshold;
+                else updated = true;
+
+                if (config.keyBinding != null && !config.keyBinding.isEmpty())
+                    keyBinding = config.keyBinding;
+                else updated = true;
+
                 currentKeyBinding = InputUtil.fromTranslationKey(keyBinding);
-                isEntityTrackingEnabled = config.isEntityTrackingEnabled;
-                nearbyEntityCount = config.nearbyEntityCount;
-                radius = config.radius;
+
+                if (config.isEntityTrackingEnabled != null)
+                    isEntityTrackingEnabled = config.isEntityTrackingEnabled;
+                else updated = true;
+
+                if (config.nearbyEntityCount != null)
+                    nearbyEntityCount = config.nearbyEntityCount;
+                else updated = true;
+
+                if (config.radius != null)
+                    radius = config.radius;
+                else updated = true;
+
+                if (config.showJoinMessage != null)
+                    showJoinMessage = config.showJoinMessage;
+                else updated = true;
+
             } catch (IOException e) {
                 System.err.println("Failed to load config: " + e.getMessage());
             }
         } else {
-            saveConfig();
+            updated = true;
+        }
+
+        if (updated) {
+            saveConfig(); // write back with missing defaults filled in
         }
     }
 
@@ -45,7 +75,7 @@ public class ConfigManager {
         try {
             CONFIG_FILE.getParentFile().mkdirs();
             try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
-                ConfigData config = new ConfigData(isModEnabled, healthThreshold, currentKeyBinding != null ? currentKeyBinding.getTranslationKey() : "key.keyboard.unknown", isEntityTrackingEnabled, nearbyEntityCount, radius);
+                ConfigData config = new ConfigData(isModEnabled, healthThreshold, currentKeyBinding != null ? currentKeyBinding.getTranslationKey() : "key.keyboard.unknown", isEntityTrackingEnabled, nearbyEntityCount, radius, showJoinMessage);
                 GSON.toJson(config, writer);
             }
         } catch (IOException e) {
@@ -54,21 +84,24 @@ public class ConfigManager {
     }
 
     private static class ConfigData {
-        boolean isModEnabled;
-        float healthThreshold;
+        Boolean isModEnabled;
+        Float healthThreshold;
         String keyBinding;
 
-        boolean isEntityTrackingEnabled;
-        int nearbyEntityCount;
-        double radius;
+        Boolean isEntityTrackingEnabled;
+        Integer nearbyEntityCount;
+        Double radius;
 
-        public ConfigData(boolean isModEnabled, float healthThreshold, String keyBinding, boolean isEntityTrackingEnabled, int nearbyEntityCount, double radius) {
+        Boolean showJoinMessage;
+
+        public ConfigData(Boolean isModEnabled, Float healthThreshold, String keyBinding, Boolean isEntityTrackingEnabled, Integer nearbyEntityCount, Double radius, Boolean showJoinMessage) {
             this.isModEnabled = isModEnabled;
             this.healthThreshold = healthThreshold;
             this.keyBinding = keyBinding;
             this.isEntityTrackingEnabled = isEntityTrackingEnabled;
             this.nearbyEntityCount = nearbyEntityCount;
             this.radius = radius;
+            this.showJoinMessage = showJoinMessage;
         }
     }
 }

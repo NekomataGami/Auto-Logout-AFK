@@ -3,14 +3,18 @@
 </p>
 
 <p align="center">
-<b>Auto Logout</b> saves you when having low life. When enabled it leaves the sever or world you are playing on if your lifes drop below the set threshold. By default the threshold is set to 4 lifes (=2❤️).
+<b>Auto Logout</b> saves you when having low life. When enabled it automatically disconnects you from the sever or world if your lifes drop below the set threshold.
 </p>
 
 ## Config
 Use **Commands** or the **Mod Menu Integration** to change the settings to fit your wishes.
 
+> [!NOTE]
+> ⚠️ From v2.0.0 (Minecraft 1.21.9+) Auto Logout works without any other Mods except FabricAPI and can be controlled using the commands.
+> But for using the Settings GUI you need [Mod Menu](https://modrinth.com/project/mOgUt4GM) and [Cloth Config API](https://modrinth.com/project/9s6osm5g), which also enables the Keybinding option. ⚠️
+
 ### Commands
-```
+```yml
 /auto-logout help
 /auto-logout enable
 /auto-logout disable
@@ -29,9 +33,9 @@ Use **Commands** or the **Mod Menu Integration** to change the settings to fit y
 
 ### Mod Menu Integration
 > [!IMPORTANT]
-> asd
+> Requires [Mod Menu](https://modrinth.com/project/mOgUt4GM) and [Cloth Config API](https://modrinth.com/project/9s6osm5g)
 
-![https://cdn.modrinth.com/data/vJC9d9qa/images/fb632edc4894ad40aefcf42245f9d0b78f0e410b.png](https://cdn.modrinth.com/data/vJC9d9qa/images/fb632edc4894ad40aefcf42245f9d0b78f0e410b.png)
+![https://cdn.modrinth.com/data/vJC9d9qa/images/f0390fdf295f1deb42c0f6847c1d571f5e656f2e.png](https://cdn.modrinth.com/data/vJC9d9qa/images/f0390fdf295f1deb42c0f6847c1d571f5e656f2e.png)
 
 ### Defaults
 - Enabled: Yes
@@ -40,3 +44,6 @@ Use **Commands** or the **Mod Menu Integration** to change the settings to fit y
 - Entity Tracking: Yes
 - Entity Count: 5
 - Radius: 20
+- Show message when joining world: Yes
+---
+<p align="center"><b>Creator Website: <a href="https://myownbrain.de">🔗myownbrain.de</a></b></p>

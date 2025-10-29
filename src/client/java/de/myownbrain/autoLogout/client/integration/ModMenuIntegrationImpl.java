@@ -88,6 +88,16 @@ public class ModMenuIntegrationImpl implements ModMenuApi {
                 .build()
         );
 
+        general.addEntry(entryBuilder.startBooleanToggle(Text.literal("Show message when joining a world"), ConfigManager.showJoinMessage)
+                .setDefaultValue(true)
+                .setSaveConsumer(newValue -> {
+                    ConfigManager.showJoinMessage = newValue;
+                    ConfigManager.saveConfig();
+                })
+                .setTooltip(Text.literal("Shows a message when joining a world telling whether the Mod and Entity Tracking are enabled."))
+                .build()
+        );
+
         builder.setSavingRunnable(ConfigManager::saveConfig);
 
         return builder.build();

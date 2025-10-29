@@ -16,16 +16,18 @@ public class AutoLogoutClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (client.player == null) return;
 
-            if (ConfigManager.isModEnabled) HealthMonitor.monitorPlayerHealth(client);
+            if (ConfigManager.isModEnabled) {
+                HealthMonitor.monitorPlayerHealth(client);
 
-            if (ConfigManager.isEntityTrackingEnabled)
-                NearestEntityFinder.updateNearestEntities(client, ConfigManager.radius);
+                if (ConfigManager.isEntityTrackingEnabled)
+                    NearestEntityFinder.updateNearestEntities(client, ConfigManager.radius);
+            }
 
             if (ModMenuIntegration.isAvailable()) ModMenuIntegration.handleToggleKey(client);
         });
 
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-            if (client.player != null) {
+            if (client.player != null && ConfigManager.showJoinMessage) {
                 client.player.sendMessage(Text.literal("Auto Logout is ").formatted(ConfigManager.isModEnabled ? Formatting.GREEN : Formatting.RED)
                         .append(Text.literal(ConfigManager.isModEnabled ? "enabled " : "disabled ").formatted(ConfigManager.isModEnabled ? Formatting.GREEN : Formatting.RED, Formatting.BOLD))
                         .append(Text.literal("(threshold ").formatted(Formatting.GOLD))
