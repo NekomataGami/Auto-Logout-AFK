@@ -1,19 +1,18 @@
 package de.myownbrain.autoLogout.client;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
 import java.text.DecimalFormat;
 import java.util.List;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.player.Player;
 
 public class HealthMonitor {
     static DecimalFormat healthFormat = new DecimalFormat("#.##");
     static DecimalFormat coordsFormat = new DecimalFormat("#");
 
-    public static void monitorPlayerHealth(MinecraftClient client) {
+    public static void monitorPlayerHealth(Minecraft client) {
         if (ConfigManager.isModEnabled && client.player != null) {
             float health = client.player.getHealth();
             if (health <= ConfigManager.healthThreshold) {
@@ -21,16 +20,16 @@ public class HealthMonitor {
                 String playerY = coordsFormat.format(client.player.getY() >= 0 ? Math.floor(client.player.getY()) : Math.ceil(client.player.getY()));
                 String playerZ = coordsFormat.format(client.player.getZ() >= 0 ? Math.floor(client.player.getZ()) : Math.ceil(client.player.getZ()));
 
-                MutableText text = Text.literal("You were disconnected by Auto Logout due to low health.\n\n").styled(style -> style.withBold(true).withColor(Formatting.GREEN)).append(Text.literal("Health: " + healthFormat.format(client.player.getHealth()) + " (≈" + Math.floor(client.player.getHealth()) / 2 + " Hearts)\n").styled(style -> style.withColor(Formatting.GOLD))).append(Text.literal(String.format("Coordinates: %s %s %s", playerX, playerY, playerZ)).styled(style -> style.withColor(Formatting.GOLD)));
+                MutableComponent text = Component.literal("You were disconnected by Auto Logout due to low health.\n\n").withStyle(style -> style.withBold(true).withColor(ChatFormatting.GREEN)).append(Component.literal("Health: " + healthFormat.format(client.player.getHealth()) + " (≈" + Math.floor(client.player.getHealth()) / 2 + " Hearts)\n").withStyle(style -> style.withColor(ChatFormatting.GOLD))).append(Component.literal(String.format("Coordinates: %s %s %s", playerX, playerY, playerZ)).withStyle(style -> style.withColor(ChatFormatting.GOLD)));
 
                 if (ConfigManager.isEntityTrackingEnabled) {
-                    List<String> entityNames = NearestEntityFinder.getNearestEntities().stream().map(entity -> entity instanceof PlayerEntity ? entity.getName().getString() : entity.getType().getName().getString()).toList();
-                    text.append(Text.literal("\nNearby Entities: " + String.join(", ", entityNames)).styled(style -> style.withColor(Formatting.GOLD)));
+                    List<String> entityNames = NearestEntityFinder.getNearestEntities().stream().map(entity -> entity instanceof Player ? entity.getName().getString() : entity.getType().getDescription().getString()).toList();
+                    text.append(Component.literal("\nNearby Entities: " + String.join(", ", entityNames)).withStyle(style -> style.withColor(ChatFormatting.GOLD)));
                 }
 
-                text.append(Text.literal("\n\nAuto Logout got disabled.").styled(style -> style.withColor(Formatting.WHITE)));
+                text.append(Component.literal("\n\nAuto Logout got disabled.").withStyle(style -> style.withColor(ChatFormatting.WHITE)));
 
-                client.player.networkHandler.getConnection().disconnect(text);
+                client.player.connection.getConnection().disconnect(text);
                 ConfigManager.isModEnabled = false;
                 ConfigManager.saveConfig();
             }

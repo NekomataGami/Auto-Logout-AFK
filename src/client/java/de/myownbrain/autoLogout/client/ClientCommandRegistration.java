@@ -6,9 +6,9 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
 public class ClientCommandRegistration {
     public static void registerCommands() {
@@ -53,29 +53,29 @@ public class ClientCommandRegistration {
     }
 
     private static int toggleAutoLogout(boolean enable) {
-        if (MinecraftClient.getInstance().player == null) return 0;
+        if (Minecraft.getInstance().player == null) return 0;
 
         ConfigManager.isModEnabled = enable;
         ConfigManager.saveConfig();
-        MinecraftClient.getInstance().player.sendMessage(Text.literal("Auto Logout ").append(Text.literal(enable ? "enabled" : "disabled").styled(style -> style.withBold(true))).styled(style -> style.withColor(enable ? Formatting.GREEN : Formatting.RED)), false);
+        Minecraft.getInstance().player.displayClientMessage(Component.literal("Auto Logout ").append(Component.literal(enable ? "enabled" : "disabled").withStyle(style -> style.withBold(true))).withStyle(style -> style.withColor(enable ? ChatFormatting.GREEN : ChatFormatting.RED)), false);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int showThreshold(FabricClientCommandSource source) {
-        source.sendFeedback(Text.literal("Health threshold set to ").append(Text.literal(String.valueOf(ConfigManager.healthThreshold)).styled(style -> style.withBold(true))).styled(style -> style.withColor(Formatting.GOLD)));
+        source.sendFeedback(Component.literal("Health threshold set to ").append(Component.literal(String.valueOf(ConfigManager.healthThreshold)).withStyle(style -> style.withBold(true))).withStyle(style -> style.withColor(ChatFormatting.GOLD)));
         return Command.SINGLE_SUCCESS;
     }
 
     private static int setThreshold(int threshold) {
-        if (MinecraftClient.getInstance().player == null) return 0;
+        if (Minecraft.getInstance().player == null) return 0;
 
         if (threshold >= 0 && threshold <= 20) {
             ConfigManager.healthThreshold = threshold;
             ConfigManager.saveConfig();
-            MinecraftClient.getInstance().player.sendMessage(Text.literal("Health threshold set to ").append(Text.literal(String.valueOf(ConfigManager.healthThreshold)).styled(style -> style.withBold(true))).styled(style -> style.withColor(Formatting.GOLD)), false);
+            Minecraft.getInstance().player.displayClientMessage(Component.literal("Health threshold set to ").append(Component.literal(String.valueOf(ConfigManager.healthThreshold)).withStyle(style -> style.withBold(true))).withStyle(style -> style.withColor(ChatFormatting.GOLD)), false);
         } else {
-            MinecraftClient.getInstance().player.sendMessage(
-                    Text.literal("Invalid threshold! Must be between 0 and 20.").styled(style -> style.withColor(Formatting.RED)),
+            Minecraft.getInstance().player.displayClientMessage(
+                    Component.literal("Invalid threshold! Must be between 0 and 20.").withStyle(style -> style.withColor(ChatFormatting.RED)),
                     false
             );
         }
@@ -83,28 +83,28 @@ public class ClientCommandRegistration {
     }
 
     private static int toggleEntityTracking(boolean enable) {
-        if (MinecraftClient.getInstance().player == null) return 0;
+        if (Minecraft.getInstance().player == null) return 0;
         ConfigManager.isEntityTrackingEnabled = enable;
         ConfigManager.saveConfig();
-        MinecraftClient.getInstance().player.sendMessage(Text.literal("Entity Tracking ").append(Text.literal(enable ? "enabled" : "disabled").styled(style -> style.withBold(true))).styled(style -> style.withColor(enable ? Formatting.GREEN : Formatting.RED)), false);
+        Minecraft.getInstance().player.displayClientMessage(Component.literal("Entity Tracking ").append(Component.literal(enable ? "enabled" : "disabled").withStyle(style -> style.withBold(true))).withStyle(style -> style.withColor(enable ? ChatFormatting.GREEN : ChatFormatting.RED)), false);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int showNearbyEntityCount(FabricClientCommandSource source) {
-        source.sendFeedback(Text.literal("Nearby Entity Count set to ").append(Text.literal(String.valueOf(ConfigManager.nearbyEntityCount)).styled(style -> style.withBold(true))).styled(style -> style.withColor(Formatting.GOLD)));
+        source.sendFeedback(Component.literal("Nearby Entity Count set to ").append(Component.literal(String.valueOf(ConfigManager.nearbyEntityCount)).withStyle(style -> style.withBold(true))).withStyle(style -> style.withColor(ChatFormatting.GOLD)));
         return Command.SINGLE_SUCCESS;
     }
 
     private static int setNearbyEntityCount(int count) {
-        if (MinecraftClient.getInstance().player == null) return 0;
+        if (Minecraft.getInstance().player == null) return 0;
 
         if (count >= 1 && count <= 10) {
             ConfigManager.nearbyEntityCount = count;
             ConfigManager.saveConfig();
-            MinecraftClient.getInstance().player.sendMessage(Text.literal("Nearby Entity Count set to ").append(Text.literal(String.valueOf(ConfigManager.nearbyEntityCount)).styled(style -> style.withBold(true))).styled(style -> style.withColor(Formatting.GOLD)), false);
+            Minecraft.getInstance().player.displayClientMessage(Component.literal("Nearby Entity Count set to ").append(Component.literal(String.valueOf(ConfigManager.nearbyEntityCount)).withStyle(style -> style.withBold(true))).withStyle(style -> style.withColor(ChatFormatting.GOLD)), false);
         } else {
-            MinecraftClient.getInstance().player.sendMessage(
-                    Text.literal("Invalid Nearby Entity Count! Must be between 1 and 10.").styled(style -> style.withColor(Formatting.RED)),
+            Minecraft.getInstance().player.displayClientMessage(
+                    Component.literal("Invalid Nearby Entity Count! Must be between 1 and 10.").withStyle(style -> style.withColor(ChatFormatting.RED)),
                     false
             );
         }
@@ -112,20 +112,20 @@ public class ClientCommandRegistration {
     }
 
     private static int showTrackingRadius(FabricClientCommandSource source) {
-        source.sendFeedback(Text.literal("Tracking Radius set to ").append(Text.literal(String.valueOf(ConfigManager.radius)).styled(style -> style.withBold(true))).styled(style -> style.withColor(Formatting.GOLD)));
+        source.sendFeedback(Component.literal("Tracking Radius set to ").append(Component.literal(String.valueOf(ConfigManager.radius)).withStyle(style -> style.withBold(true))).withStyle(style -> style.withColor(ChatFormatting.GOLD)));
         return Command.SINGLE_SUCCESS;
     }
 
     private static int setTrackingRadius(double radius) {
-        if (MinecraftClient.getInstance().player == null) return 0;
+        if (Minecraft.getInstance().player == null) return 0;
 
         if (radius >= 1.0 && radius <= 64.0) {
             ConfigManager.radius = radius;
             ConfigManager.saveConfig();
-            MinecraftClient.getInstance().player.sendMessage(Text.literal("Tracking Radius set to ").append(Text.literal(String.valueOf(ConfigManager.radius)).styled(style -> style.withBold(true))).styled(style -> style.withColor(Formatting.GOLD)), false);
+            Minecraft.getInstance().player.displayClientMessage(Component.literal("Tracking Radius set to ").append(Component.literal(String.valueOf(ConfigManager.radius)).withStyle(style -> style.withBold(true))).withStyle(style -> style.withColor(ChatFormatting.GOLD)), false);
         } else {
-            MinecraftClient.getInstance().player.sendMessage(
-                    Text.literal("Invalid Tracking Radius! Must be between 1 and 64.").styled(style -> style.withColor(Formatting.RED)),
+            Minecraft.getInstance().player.displayClientMessage(
+                    Component.literal("Invalid Tracking Radius! Must be between 1 and 64.").withStyle(style -> style.withColor(ChatFormatting.RED)),
                     false
             );
         }
@@ -133,33 +133,32 @@ public class ClientCommandRegistration {
     }
 
     private static int toggleJoinMessage(boolean enable) {
-        if (MinecraftClient.getInstance().player == null) return 0;
+        if (Minecraft.getInstance().player == null) return 0;
 
         ConfigManager.showJoinMessage = enable;
         ConfigManager.saveConfig();
-        MinecraftClient.getInstance().player.sendMessage(Text.literal("Join Message ").append(Text.literal(enable ? "enabled" : "disabled").styled(style -> style.withBold(true))).styled(style -> style.withColor(enable ? Formatting.GREEN : Formatting.RED)), false);
+        Minecraft.getInstance().player.displayClientMessage(Component.literal("Join Message ").append(Component.literal(enable ? "enabled" : "disabled").withStyle(style -> style.withBold(true))).withStyle(style -> style.withColor(enable ? ChatFormatting.GREEN : ChatFormatting.RED)), false);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int showHelp(FabricClientCommandSource source) {
-        source.sendFeedback(Text.literal("")
-                .append(Text.literal("\nAuto Logout Commands\n").formatted(Formatting.GOLD, Formatting.BOLD, Formatting.UNDERLINE))
-                .append(Text.literal("/auto-logout help").formatted(Formatting.YELLOW)).append(Text.literal(" - Displays the this help Menu\n").formatted(Formatting.WHITE))
-                .append(Text.literal("/auto-logout enable").formatted(Formatting.GREEN)).append(Text.literal(" - Enables the mod\n").formatted(Formatting.WHITE))
-                .append(Text.literal("/auto-logout disable").formatted(Formatting.RED)).append(Text.literal(" - Disables the mod\n").formatted(Formatting.WHITE))
-                .append(Text.literal("/auto-logout threshold").formatted(Formatting.DARK_PURPLE)).append(Text.literal(" - Displays the current threshold\n").formatted(Formatting.WHITE))
-                .append(Text.literal("/auto-logout threshold <value>").formatted(Formatting.AQUA)).append(Text.literal(" - Sets the threshold\n").formatted(Formatting.WHITE))
-                .append(Text.literal("/auto-logout join-message enable").formatted(Formatting.GREEN)).append(Text.literal(" - Enables the message when joining a world\n").formatted(Formatting.WHITE))
-                .append(Text.literal("/auto-logout join-message disable").formatted(Formatting.RED)).append(Text.literal(" - Disables the message when joining a world\n").formatted(Formatting.WHITE))
-                .append(Text.literal("\nEntity Tracking:\n").formatted(Formatting.GOLD))
-                .append(Text.literal("/auto-logout entity-tracking enable").formatted(Formatting.GREEN)).append(Text.literal(" - Enables Entity Tracking\n").formatted(Formatting.WHITE))
-                .append(Text.literal("/auto-logout entity-tracking disable").formatted(Formatting.RED)).append(Text.literal(" - Disables Entity Tracking\n").formatted(Formatting.WHITE))
-                .append(Text.literal("/auto-logout entity-tracking entity-count").formatted(Formatting.DARK_PURPLE)).append(Text.literal(" - Displays the current Nearby Entity Count\n").formatted(Formatting.WHITE))
-                .append(Text.literal("/auto-logout entity-tracking entity-count <value>").formatted(Formatting.AQUA)).append(Text.literal(" - Sets the Nearby Entity Count\n").formatted(Formatting.WHITE))
-                .append(Text.literal("/auto-logout entity-tracking radius").formatted(Formatting.DARK_PURPLE)).append(Text.literal(" - Displays the current Tracking Radius\n").formatted(Formatting.WHITE))
-                .append(Text.literal("/auto-logout entity-tracking radius <value>").formatted(Formatting.AQUA)).append(Text.literal(" - Sets the Tracking Radius\n").formatted(Formatting.WHITE))
+        source.sendFeedback(Component.literal("")
+                .append(Component.literal("\nAuto Logout Commands\n").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD, ChatFormatting.UNDERLINE))
+                .append(Component.literal("/auto-logout help").withStyle(ChatFormatting.YELLOW)).append(Component.literal(" - Displays the this help Menu\n").withStyle(ChatFormatting.WHITE))
+                .append(Component.literal("/auto-logout enable").withStyle(ChatFormatting.GREEN)).append(Component.literal(" - Enables the mod\n").withStyle(ChatFormatting.WHITE))
+                .append(Component.literal("/auto-logout disable").withStyle(ChatFormatting.RED)).append(Component.literal(" - Disables the mod\n").withStyle(ChatFormatting.WHITE))
+                .append(Component.literal("/auto-logout threshold").withStyle(ChatFormatting.DARK_PURPLE)).append(Component.literal(" - Displays the current threshold\n").withStyle(ChatFormatting.WHITE))
+                .append(Component.literal("/auto-logout threshold <value>").withStyle(ChatFormatting.AQUA)).append(Component.literal(" - Sets the threshold\n").withStyle(ChatFormatting.WHITE))
+                .append(Component.literal("/auto-logout join-message enable").withStyle(ChatFormatting.GREEN)).append(Component.literal(" - Enables the message when joining a world\n").withStyle(ChatFormatting.WHITE))
+                .append(Component.literal("/auto-logout join-message disable").withStyle(ChatFormatting.RED)).append(Component.literal(" - Disables the message when joining a world\n").withStyle(ChatFormatting.WHITE))
+                .append(Component.literal("\nEntity Tracking:\n").withStyle(ChatFormatting.GOLD))
+                .append(Component.literal("/auto-logout entity-tracking enable").withStyle(ChatFormatting.GREEN)).append(Component.literal(" - Enables Entity Tracking\n").withStyle(ChatFormatting.WHITE))
+                .append(Component.literal("/auto-logout entity-tracking disable").withStyle(ChatFormatting.RED)).append(Component.literal(" - Disables Entity Tracking\n").withStyle(ChatFormatting.WHITE))
+                .append(Component.literal("/auto-logout entity-tracking entity-count").withStyle(ChatFormatting.DARK_PURPLE)).append(Component.literal(" - Displays the current Nearby Entity Count\n").withStyle(ChatFormatting.WHITE))
+                .append(Component.literal("/auto-logout entity-tracking entity-count <value>").withStyle(ChatFormatting.AQUA)).append(Component.literal(" - Sets the Nearby Entity Count\n").withStyle(ChatFormatting.WHITE))
+                .append(Component.literal("/auto-logout entity-tracking radius").withStyle(ChatFormatting.DARK_PURPLE)).append(Component.literal(" - Displays the current Tracking Radius\n").withStyle(ChatFormatting.WHITE))
+                .append(Component.literal("/auto-logout entity-tracking radius <value>").withStyle(ChatFormatting.AQUA)).append(Component.literal(" - Sets the Tracking Radius\n").withStyle(ChatFormatting.WHITE))
         );
 
         return Command.SINGLE_SUCCESS;
-    }
-}
+    }}

@@ -1,30 +1,29 @@
 package de.myownbrain.autoLogout.client;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 public class NearestEntityFinder {
     private static List<Entity> nearestEntity = new ArrayList<>();
 
-    public static void updateNearestEntities(MinecraftClient client, double radius) {
-        if (client.world == null || client.player == null) return;
+    public static void updateNearestEntities(Minecraft client, double radius) {
+        if (client.level == null || client.player == null) return;
 
-        Vec3d playerPos = client.player.getEntityPos();
-        Box searchBox = new Box(
+        Vec3 playerPos = client.player.position();
+        AABB searchBox = new AABB(
                 playerPos.x - radius, playerPos.y - radius, playerPos.z - radius,
                 playerPos.x + radius, playerPos.y + radius, playerPos.z + radius
         );
 
-        nearestEntity = client.world.getOtherEntities(client.player, searchBox).stream()
+        nearestEntity = client.level.getEntities(client.player, searchBox).stream()
                 .filter(entity -> entity instanceof LivingEntity)
-                .sorted(Comparator.comparingDouble(entity -> playerPos.squaredDistanceTo(entity.getEntityPos())))
+                .sorted(Comparator.comparingDouble(entity -> playerPos.distanceToSqr(entity.position())))
                 .limit(ConfigManager.nearbyEntityCount)
                 .toList();
     }

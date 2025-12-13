@@ -3,8 +3,8 @@ package de.myownbrain.autoLogout.client;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 
 public class AutoLogoutClient implements ClientModInitializer {
     @Override
@@ -28,14 +28,13 @@ public class AutoLogoutClient implements ClientModInitializer {
 
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             if (client.player != null && ConfigManager.showJoinMessage) {
-                client.player.sendMessage(Text.literal("Auto Logout is ").formatted(ConfigManager.isModEnabled ? Formatting.GREEN : Formatting.RED)
-                        .append(Text.literal(ConfigManager.isModEnabled ? "enabled " : "disabled ").formatted(ConfigManager.isModEnabled ? Formatting.GREEN : Formatting.RED, Formatting.BOLD))
-                        .append(Text.literal("(threshold ").formatted(Formatting.GOLD))
-                        .append(Text.literal(String.valueOf(ConfigManager.healthThreshold)).formatted(Formatting.GOLD, Formatting.BOLD))
-                        .append(Text.literal(")").formatted(Formatting.GOLD))
-                        .append(Text.literal("\nEntity Tracking is ").formatted(ConfigManager.isEntityTrackingEnabled ? Formatting.GREEN : Formatting.RED))
-                        .append(Text.literal(ConfigManager.isEntityTrackingEnabled ? "enabled " : "disabled ").formatted(ConfigManager.isEntityTrackingEnabled ? Formatting.GREEN : Formatting.RED, Formatting.BOLD)), false)
-                ;
+                client.player.displayClientMessage(Component.literal("Auto Logout is ").withStyle(ConfigManager.isModEnabled ? ChatFormatting.GREEN : ChatFormatting.RED)
+                        .append(Component.literal(ConfigManager.isModEnabled ? "enabled " : "disabled ").withStyle(ConfigManager.isModEnabled ? ChatFormatting.GREEN : ChatFormatting.RED, ChatFormatting.BOLD))
+                        .append(Component.literal("(threshold ").withStyle(ChatFormatting.GOLD))
+                        .append(Component.literal(String.valueOf(ConfigManager.healthThreshold)).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
+                        .append(Component.literal(")").withStyle(ChatFormatting.GOLD))
+                        .append(Component.literal("\nEntity Tracking is ").withStyle(ConfigManager.isEntityTrackingEnabled ? ChatFormatting.GREEN : ChatFormatting.RED))
+                        .append(Component.literal(ConfigManager.isEntityTrackingEnabled ? "enabled " : "disabled ").withStyle(ConfigManager.isEntityTrackingEnabled ? ChatFormatting.GREEN : ChatFormatting.RED, ChatFormatting.BOLD)), false);
             }
         });
     }

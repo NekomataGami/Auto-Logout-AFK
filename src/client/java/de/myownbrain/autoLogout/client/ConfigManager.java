@@ -2,8 +2,7 @@ package de.myownbrain.autoLogout.client;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.minecraft.client.util.InputUtil;
-
+import com.mojang.blaze3d.platform.InputConstants;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -16,7 +15,7 @@ public class ConfigManager {
     public static boolean isModEnabled = true;
     public static float healthThreshold = 4.0f;
     public static String keyBinding = "key.keyboard.unknown";
-    public static InputUtil.Key currentKeyBinding = InputUtil.fromTranslationKey(keyBinding);
+    public static InputConstants.Key currentKeyBinding = InputConstants.getKey(keyBinding);
 
     public static boolean isEntityTrackingEnabled = true;
     public static int nearbyEntityCount = 5;
@@ -41,7 +40,7 @@ public class ConfigManager {
                     keyBinding = config.keyBinding;
                 else updated = true;
 
-                currentKeyBinding = InputUtil.fromTranslationKey(keyBinding);
+                currentKeyBinding = InputConstants.getKey(keyBinding);
 
                 if (config.isEntityTrackingEnabled != null)
                     isEntityTrackingEnabled = config.isEntityTrackingEnabled;
@@ -75,7 +74,7 @@ public class ConfigManager {
         try {
             CONFIG_FILE.getParentFile().mkdirs();
             try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
-                ConfigData config = new ConfigData(isModEnabled, healthThreshold, currentKeyBinding != null ? currentKeyBinding.getTranslationKey() : "key.keyboard.unknown", isEntityTrackingEnabled, nearbyEntityCount, radius, showJoinMessage);
+                ConfigData config = new ConfigData(isModEnabled, healthThreshold, currentKeyBinding != null ? currentKeyBinding.getName() : "key.keyboard.unknown", isEntityTrackingEnabled, nearbyEntityCount, radius, showJoinMessage);
                 GSON.toJson(config, writer);
             }
         } catch (IOException e) {
