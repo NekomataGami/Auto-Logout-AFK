@@ -1,17 +1,9 @@
 <p align="center">
-  <img src="https://cdn.modrinth.com/data/cached_images/87b100d859992af6a1b5f0e395d948d3949595ea.png" width="640">
-</p>
-
-<p align="center">
-<b>Auto Logout</b> saves you when having low life. When enabled it automatically disconnects you from the sever or world if your lifes drop below the set threshold.
+<b>Auto Logout</b> A fork of Auto-Logout that automatically disconnects you from the server or world if you are AFK and your HP drops below the threshold after taking damage.
 </p>
 
 ## Config
 Use **Commands** or the **Mod Menu Integration** to change the settings to fit your wishes.
-
-> [!NOTE]
-> ⚠️ From v2.0.0 (Minecraft 1.21.9+) Auto Logout works without any other Mods except FabricAPI and can be controlled using the commands.
-> But for using the Settings GUI you need [Mod Menu](https://modrinth.com/project/mOgUt4GM) and [Cloth Config API](https://modrinth.com/project/9s6osm5g), which also enables the Keybinding option. ⚠️
 
 ### Commands
 ```yml
@@ -47,5 +39,3 @@ Use **Commands** or the **Mod Menu Integration** to change the settings to fit y
 - Entity Count: 1
 - Radius: 20
 - Show message when joining world: No
----
-<p align="center"><b>Creator Website: <a href="https://myownbrain.de">🔗myownbrain.de</a></b></p>
