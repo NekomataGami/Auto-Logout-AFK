@@ -41,11 +41,11 @@ Use **Commands** or the **Mod Menu Integration** to change the settings to fit y
 
 ### Defaults
 - Enabled: Yes
-- Threshold: 4
+- Threshold: 10
 - Keybinding: Not Bound
 - Entity Tracking: Yes
-- Entity Count: 5
+- Entity Count: 1
 - Radius: 20
-- Show message when joining world: Yes
+- Show message when joining world: No
 ---
 <p align="center"><b>Creator Website: <a href="https://myownbrain.de">🔗myownbrain.de</a></b></p>
