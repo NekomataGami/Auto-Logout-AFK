@@ -21,7 +21,7 @@ public class ConfigManager {
     public static int nearbyEntityCount = 1;
     public static double radius = 20;
 
-    public static boolean showJoinMessage = true;
+    public static boolean showJoinMessage = false;
 
     public static int afkThresholdSeconds = 15; 
 
