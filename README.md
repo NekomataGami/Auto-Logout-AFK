@@ -29,8 +29,6 @@ Use **Commands** or the **Mod Menu Integration** to change the settings to fit y
 > [!IMPORTANT]
 > Requires [Mod Menu](https://modrinth.com/project/mOgUt4GM) and [Cloth Config API](https://modrinth.com/project/9s6osm5g)
 
-![https://cdn.modrinth.com/data/vJC9d9qa/images/f0390fdf295f1deb42c0f6847c1d571f5e656f2e.png](https://cdn.modrinth.com/data/vJC9d9qa/images/f0390fdf295f1deb42c0f6847c1d571f5e656f2e.png)
-
 ### Defaults
 - Enabled: Yes
 - Threshold: 10
