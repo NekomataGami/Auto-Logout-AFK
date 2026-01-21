@@ -24,7 +24,7 @@ Use **Commands** or the **Mod Menu Integration** to change the settings to fit y
 ```
 **Threshold** value has to be between **0** and **20**.<br/>
 **Entity Count** value has to be between **1** and **10**.<br/>
-**Radius value** has to be between **1** and **64**.
+**Radius value** has to be between **1** and **64**.<br/>
 **AFK Threshold seconds** has to be between **5** and **600**.
 
 ### Mod Menu Integration
