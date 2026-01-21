@@ -20,10 +20,12 @@ Use **Commands** or the **Mod Menu Integration** to change the settings to fit y
 /auto-logout entity-tracking radius <value>
 /auto-logout join-message enable
 /auto-logout join-message disable
+/auto-logout afk-threshold-seconds <value>
 ```
 **Threshold** value has to be between **0** and **20**.<br/>
 **Entity Count** value has to be between **1** and **10**.<br/>
 **Radius value** has to be between **1** and **64**.
+**AFK Threshold seconds** has to be between **5** and **600**.
 
 ### Mod Menu Integration
 > [!IMPORTANT]
