@@ -13,17 +13,17 @@ public class ConfigManager {
     private static final File CONFIG_FILE = new File("config/auto_logout.json");
 
     public static boolean isModEnabled = true;
-    public static float healthThreshold = 4.0f;
+    public static float healthThreshold = 10.0f;
     public static String keyBinding = "key.keyboard.unknown";
     public static InputConstants.Key currentKeyBinding = InputConstants.getKey(keyBinding);
 
     public static boolean isEntityTrackingEnabled = true;
-    public static int nearbyEntityCount = 5;
+    public static int nearbyEntityCount = 1;
     public static double radius = 20;
 
     public static boolean showJoinMessage = true;
 
-    public static int afkThresholdSeconds = 30; 
+    public static int afkThresholdSeconds = 15; 
 
     public static void loadConfig() {
         boolean updated = false;
