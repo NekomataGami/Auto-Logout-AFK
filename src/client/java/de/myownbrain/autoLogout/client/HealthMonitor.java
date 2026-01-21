@@ -105,15 +105,12 @@ public class HealthMonitor {
                     .withStyle(style -> style.withColor(ChatFormatting.GOLD)));
         }
 
-        text.append(Component.literal("\n\nAuto Logout got disabled.")
+        text.append(Component.literal("\n\nYou're safe, for now.")
                 .withStyle(style -> style.withColor(ChatFormatting.WHITE)));
 
         client.gui.getChat().addMessage(text);
 
         client.getConnection().getConnection().disconnect(text);
-
-        ConfigManager.isModEnabled = false;
-        ConfigManager.saveConfig();
 
         afkTicks = 0;
         healthWhenAfkStarted = -1f;
