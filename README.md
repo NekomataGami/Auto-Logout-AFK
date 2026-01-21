@@ -37,3 +37,4 @@ Use **Commands** or the **Mod Menu Integration** to change the settings to fit y
 - Entity Count: 1
 - Radius: 20
 - Show message when joining world: No
+- AFK Threshold seconds: 15
