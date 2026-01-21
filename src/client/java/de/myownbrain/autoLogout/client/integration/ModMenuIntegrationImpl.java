@@ -23,7 +23,6 @@ public class ModMenuIntegrationImpl implements ModMenuApi {
                 .setTitle(Component.literal("Auto Logout Configuration"));
 
         ConfigCategory general = builder.getOrCreateCategory(Component.literal("General Settings"));
-
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
         general.addEntry(entryBuilder.startBooleanToggle(Component.literal("Enable Auto Logout"), ConfigManager.isModEnabled)
@@ -47,6 +46,18 @@ public class ModMenuIntegrationImpl implements ModMenuApi {
                 .build()
         );
 
+        general.addEntry(entryBuilder.startIntField(Component.literal("AFK Threshold (seconds)"), ConfigManager.afkThresholdSeconds)
+                .setDefaultValue(15)
+                .setMin(5)
+                .setMax(600)
+                .setSaveConsumer(newValue -> {
+                    ConfigManager.afkThresholdSeconds = newValue;
+                    ConfigManager.saveConfig();
+                })
+                .setTooltip(Component.literal("Time you must be AFK before Auto Logout can trigger.\nOnly disconnects if you take damage while AFK and HP is below the threshold."))
+                .build()
+        );
+
         general.addEntry(entryBuilder.startKeyCodeField(Component.literal("Toggle Auto Logout"), ConfigManager.currentKeyBinding)
                 .setDefaultValue(InputConstants.UNKNOWN)
                 .setKeySaveConsumer(newKey -> {
@@ -54,7 +65,8 @@ public class ModMenuIntegrationImpl implements ModMenuApi {
                     ConfigManager.keyBinding = newKey.getName();
                     ConfigManager.saveConfig();
                 })
-                .build());
+                .build()
+        );
 
         general.addEntry(entryBuilder.startBooleanToggle(Component.literal("Enable Entity Tracking"), ConfigManager.isEntityTrackingEnabled)
                 .setDefaultValue(true)
@@ -62,7 +74,8 @@ public class ModMenuIntegrationImpl implements ModMenuApi {
                     ConfigManager.isEntityTrackingEnabled = newValue;
                     ConfigManager.saveConfig();
                 })
-                .build());
+                .build()
+        );
 
         general.addEntry(entryBuilder.startIntField(Component.literal("Nearby Entity Count"), ConfigManager.nearbyEntityCount)
                 .setDefaultValue(5)
@@ -99,7 +112,6 @@ public class ModMenuIntegrationImpl implements ModMenuApi {
         );
 
         builder.setSavingRunnable(ConfigManager::saveConfig);
-
         return builder.build();
     }
 
