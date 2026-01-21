@@ -1,5 +1,5 @@
 <p align="center">
-<b>Auto Logout</b> A fork of Auto-Logout that automatically disconnects you from the server or world if you are AFK and your HP drops below the threshold after taking damage.
+A fork of Auto-Logout that automatically disconnects you from the server or world if you are AFK and your HP drops below the threshold after taking damage.
 </p>
 
 ## Config
