@@ -64,7 +64,10 @@ public class HealthMonitor {
                 client.options.keyJump.isDown() ||
                 client.options.keySprint.isDown() ||
                 client.options.keyAttack.isDown() ||
-                client.options.keyUse.isDown();
+                client.options.keyUse.isDown() ||
+                client.options.keyPlayerList.isDown() ||
+                client.options.keyInventory.isDown() ||
+                client.options.keyChat.isDown();
 
         float yaw = client.player.getYRot();
         float pitch = client.player.getXRot();
