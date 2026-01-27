@@ -3,27 +3,35 @@ package de.myownbrain.autoLogout.client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.blaze3d.platform.InputConstants;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class ConfigManager {
+public final class ConfigManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final File CONFIG_FILE = new File("config/auto_logout.json");
 
+    public static final int AFK_SECONDS_MIN = 5;
+    public static final int AFK_SECONDS_MAX = 600;
+
     public static boolean isModEnabled = true;
+
     public static float healthThreshold = 10.0f;
+
     public static String keyBinding = "key.keyboard.unknown";
     public static InputConstants.Key currentKeyBinding = InputConstants.getKey(keyBinding);
 
     public static boolean isEntityTrackingEnabled = true;
     public static int nearbyEntityCount = 1;
-    public static double radius = 20;
+    public static double radius = 20.0;
 
     public static boolean showJoinMessage = false;
 
-    public static int afkThresholdSeconds = 15; 
+    public static int afkThresholdSeconds = 15;
+
+    private ConfigManager() {}
 
     public static void loadConfig() {
         boolean updated = false;
@@ -32,38 +40,34 @@ public class ConfigManager {
             try (FileReader reader = new FileReader(CONFIG_FILE)) {
                 ConfigData config = GSON.fromJson(reader, ConfigData.class);
 
-                if (config.isModEnabled != null) isModEnabled = config.isModEnabled;
-                else updated = true;
+                if (config == null) {
+                    updated = true;
+                } else {
+                    if (config.isModEnabled != null) isModEnabled = config.isModEnabled; else updated = true;
 
-                if (config.healthThreshold != null) healthThreshold = config.healthThreshold;
-                else updated = true;
+                    if (config.healthThreshold != null) healthThreshold = config.healthThreshold; else updated = true;
 
-                if (config.keyBinding != null && !config.keyBinding.isEmpty())
-                    keyBinding = config.keyBinding;
-                else updated = true;
+                    if (config.keyBinding != null && !config.keyBinding.isBlank()) {
+                        keyBinding = config.keyBinding;
+                    } else {
+                        updated = true;
+                    }
+                    currentKeyBinding = InputConstants.getKey(keyBinding);
 
-                currentKeyBinding = InputConstants.getKey(keyBinding);
+                    if (config.isEntityTrackingEnabled != null) isEntityTrackingEnabled = config.isEntityTrackingEnabled; else updated = true;
 
-                if (config.isEntityTrackingEnabled != null)
-                    isEntityTrackingEnabled = config.isEntityTrackingEnabled;
-                else updated = true;
+                    if (config.nearbyEntityCount != null) nearbyEntityCount = config.nearbyEntityCount; else updated = true;
 
-                if (config.nearbyEntityCount != null)
-                    nearbyEntityCount = config.nearbyEntityCount;
-                else updated = true;
+                    if (config.radius != null) radius = config.radius; else updated = true;
 
-                if (config.radius != null)
-                    radius = config.radius;
-                else updated = true;
+                    if (config.showJoinMessage != null) showJoinMessage = config.showJoinMessage; else updated = true;
 
-                if (config.showJoinMessage != null)
-                    showJoinMessage = config.showJoinMessage;
-                else updated = true;
-
-                if (config.afkThresholdSeconds != null)
-                    afkThresholdSeconds = config.afkThresholdSeconds;
-                else updated = true;
-
+                    if (config.afkThresholdSeconds != null) {
+                        afkThresholdSeconds = clamp(config.afkThresholdSeconds, AFK_SECONDS_MIN, AFK_SECONDS_MAX);
+                    } else {
+                        updated = true;
+                    }
+                }
             } catch (IOException e) {
                 System.err.println("Failed to load config: " + e.getMessage());
             }
@@ -71,9 +75,7 @@ public class ConfigManager {
             updated = true;
         }
 
-        if (updated) {
-            saveConfig(); 
-        }
+        if (updated) saveConfig();
     }
 
     public static void saveConfig() {
@@ -83,12 +85,12 @@ public class ConfigManager {
                 ConfigData config = new ConfigData(
                         isModEnabled,
                         healthThreshold,
-                        currentKeyBinding != null ? currentKeyBinding.getName() : "key.keyboard.unknown",
+                        keyBinding,
                         isEntityTrackingEnabled,
                         nearbyEntityCount,
                         radius,
                         showJoinMessage,
-                        afkThresholdSeconds
+                        clamp(afkThresholdSeconds, AFK_SECONDS_MIN, AFK_SECONDS_MAX)
                 );
                 GSON.toJson(config, writer);
             }
@@ -98,10 +100,14 @@ public class ConfigManager {
     }
 
     public static int getAfkThresholdTicks() {
-        return afkThresholdSeconds * 20;
+        return clamp(afkThresholdSeconds, AFK_SECONDS_MIN, AFK_SECONDS_MAX) * 20;
     }
 
-    private static class ConfigData {
+    private static int clamp(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    private static final class ConfigData {
         Boolean isModEnabled;
         Float healthThreshold;
         String keyBinding;
@@ -114,9 +120,16 @@ public class ConfigManager {
 
         Integer afkThresholdSeconds;
 
-        public ConfigData(Boolean isModEnabled, Float healthThreshold, String keyBinding,
-                          Boolean isEntityTrackingEnabled, Integer nearbyEntityCount,
-                          Double radius, Boolean showJoinMessage, Integer afkThresholdSeconds) {
+        ConfigData(
+                Boolean isModEnabled,
+                Float healthThreshold,
+                String keyBinding,
+                Boolean isEntityTrackingEnabled,
+                Integer nearbyEntityCount,
+                Double radius,
+                Boolean showJoinMessage,
+                Integer afkThresholdSeconds
+        ) {
             this.isModEnabled = isModEnabled;
             this.healthThreshold = healthThreshold;
             this.keyBinding = keyBinding;
